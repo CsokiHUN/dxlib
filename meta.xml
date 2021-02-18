@@ -5,4 +5,5 @@
 
     <script src="modules/Label.lua" type="client" cache="false" />
     <script src="modules/Panel.lua" type="client" cache="false" />
+    <script src="modules/Button.lua" type="client" cache="false" />
 </meta>

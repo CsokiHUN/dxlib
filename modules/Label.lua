@@ -3,7 +3,7 @@ Label = {
         args.font = args.font or "default"
 
         local _Label = setmetatable(args, { __index = Label })
-
+        _Label.typ = "label"
         _Label.parent = parent or false
 
         table.insert(createdElements, _Label)

@@ -42,7 +42,9 @@ addEventHandler("onClientRender", root, function()
     for _, element in pairs(createdElements) do 
         element:draw()
 
+        element.hovered = false
         if type(element.hover) == "function" and element:hover() then 
+            element.hovered = true
             hoveredElement = element
         end
     end
@@ -62,13 +64,15 @@ addEventHandler("onClientCursorMove", root, function()
     end
 end)
 
-addEventHandler("onClientClick", root, function(button, state, clickX, clickY)
+addEventHandler("onClientClick", root, function(button, state, clickX, clickY, ...)
     if button == "left" then 
         if state == "down" then 
-            if hoveredElement and hoveredElement.moveable then 
-                local position = hoveredElement:getPosition()
-                hoveredElement.move = Vector2(position.x - clickX, position.y - clickY)
-                movedElement = hoveredElement
+            if hoveredElement then 
+                if hoveredElement.moveable then 
+                    local position = hoveredElement:getPosition()
+                    hoveredElement.move = Vector2(position.x - clickX, position.y - clickY)
+                    movedElement = hoveredElement
+                end
             end
         else 
             if movedElement then 
@@ -76,29 +80,50 @@ addEventHandler("onClientClick", root, function(button, state, clickX, clickY)
             end
         end
     end
-end)
 
+    -- if hoveredElement and (hoveredElement.typ or "") == "button" then  
+    --     outputChatBox(hoveredElement.typ)
+    --     triggerEvent("Button.onClick", resourceRoot, hoveredElement, button, state, clickX, clickY, ...)
+    -- end
+end)
 
 --TESZT
 addEventHandler("onClientResourceStart", resourceRoot, function()
-    local panel1 = Panel.create({
+    local panel = Panel.create({
         title = { --Label
             text = "title",
             color = tocolor(255, 255, 255),
+            font = "default-bold", -- * font kezelés
             align = { 
                 x = "center",
                 y = "top"
             }
         },
         position = Vector2(sx / 2, sy / 2),
-        size = Vector2(100, 100),
+        size = Vector2(120, 100),
         color = tocolor(0, 0, 0, 180),
         moveable = true,
     })
 
-    local panel2 = Panel.create({
-        position = Vector2(20, 20),
-        size = Vector2(50, 50),
-        -- moveable = true,
-    }, panel1)
+    local button = Button.create({
+        position = Vector2(10, 20),
+        size = Vector2(100, 25),
+        text = {
+            value = "send",
+            color = tocolor(0, 0, 0),
+        },
+        color = {200, 0, 100, 150},
+        hoveredColor = {0, 0, 100, 250}
+    }, panel)
+
+    local button2 = Button.create({
+        position = Vector2(10, 50),
+        size = Vector2(100, 25),
+        text = {
+            value = "quit",
+            color = tocolor(0, 0, 0),
+        },
+        color = {0, 100, 100, 150},
+        hoveredColor = {50, 50, 100, 250}
+    }, panel)
 end)
